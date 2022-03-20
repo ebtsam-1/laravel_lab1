@@ -1,6 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -80,37 +85,35 @@ Route::get("/request", function(){
 //     return view("posts", ["data"=> $posts[$post]]);
 // });
 
-Route::get("posts",function(){
-    $posts=[
-        ["title"=>"post1","description" => "test1"],
-        ["title"=>"post2", "description" => "test2"],
-        ["title"=>"post3","description" => "test3"],
-    ];
-    return view("posts", ["data"=> $posts]);
-});
+// Route::get("posts",function(){
+//     $posts=[
+//         ["title"=>"post1","description" => "test1"],
+//         ["title"=>"post2", "description" => "test2"],
+//         ["title"=>"post3","description" => "test3"],
+//     ];
+//     return view("posts", ["data"=> $posts]);
+// });
 
-Route::get("posts/{postid}",function($postId){
+Route::get("posts",[PostController::class,"index"]);
 
-    return view("operations.show",["postId" => $postId]);
-});
+Route::get("/posts/create",[PostController::class, "create"]);
+Route::post("/store",[PostController::class, "store"]);
 
+Route::get("/posts/edit/{postid}",[PostController::class, "edit"]);
+Route::put("/update/{postid}",[PostController::class, "update"]);
 
+Route::get("posts/{postid}",[PostController::class, "getPostId"]);
 
-
-
-
-
-
-
+Route::delete("/delete/{postid}",[PostController::class, "delete"]);
 
 
 
+// Resources
 
+Route::resource('/articles', ArticleController::class);
+Route::resource('/users', UserController::class);
 
-
-
-
-
+Route::get("myprofile",[UserController::class,"myprofile"]);
 
 
 
@@ -122,3 +125,24 @@ Route::get("posts/{postid}",function($postId){
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
